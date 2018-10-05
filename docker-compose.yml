@@ -1,27 +1,27 @@
 version: '3'
 services:
-  miner:
+  node1:
     build: .
-    image: bitcoind:stretch-slim
+    image: bitcoind:0.17.0
     ports:
       - "18400:18443"
       - "18500:18444"
     expose: 
       - "18444"
-    command: [ "-addnode=node1:18444", "-addnode=node2:18444"]
-  node1:
-    image: bitcoind:stretch-slim
+    command: [ "-regtest", "-addnode=node2:18444", "-addnode=node3:18444"]
+  node2:
+    image: bitcoind:0.17.0
     ports:
       - "18401:18443"
       - "18501:18444"
     expose: 
       - "18444"
-    command: [ "-addnode=miner:18444", "-addnode=node2:18444"]
-  node2:
-    image: bitcoind:stretch-slim
+    command: [ "-regtest", "-addnode=node1:18444", "-addnode=node3:18444"]
+  node3:
+    image: bitcoind:0.17.0
     ports:
       - "18402:18443"
       - "18502:18444"
     expose: 
       - "18444"
-    command: [ "-addnode=node1:18444", "-addnode=miner:18444"]
+    command: [ "-regtest", "-addnode=node1:18444", "-addnode=node2:18444"]

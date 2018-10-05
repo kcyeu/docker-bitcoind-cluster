@@ -1,4 +1,4 @@
-# Multinode / Multiwallet Bitcoin regtest network
+# Dockerized bitcoind cluster
 
 This repository allows you run a full bitcoin network in an isolated environment. It uses bitcoin's regtest capability to setup an isolated bitcoin network, and then uses docker to setup a network with 3 nodes.
 
@@ -6,33 +6,23 @@ This is useful because normally in regtest mode you would generate all coins in 
 
 ## Usage
 
-Simple run
+Simple run `docker-compose up` to start all the containers. This will start the bitcoin nodes, and expose RPC on all of them. The nodes will run on the following ports:
 
-`docker-compose up`
-
-to start all the containers. This will start the bitcoin nodes, and expose RPC on all of them. The nodes will run on the following ports:
-
-| Node | P2P port * | RPC port * | RPC Username | RPC Password |
-| --- | --- | --- | --- | ---|
-| miner1 | 18500 | 18400 | bitcoin | bitcoin |
-| node1 | 18501 | 18401 | bitcoin | bitcoin |
-| node2 | 18502 | 18402 | bitcoin | bitcoin |
+| Node  | P2P port *    | RPC port *    | RPC Username  | RPC Password  |
+|-------|---------------|---------------|---------------|---------------|
+| node1 | 18500         | 18400         | bitcoin       | bitcoin       |
+| node2 | 18501         | 18401         | bitcoin       | bitcoin       |
+| node3 | 18502         | 18402         | bitcoin       | bitcoin       |
 
 \* Port as exposed on the host running docker.
 
-## Samples
-
-Note these samples use `curl` to exercise the API, but this would usually be `bitcoin-cli`. We're using `curl` so we don't have a dependency on bitcoin in the host.
+## Examples
 
 ### Initial block count
 
 Checks that the initial block count is 0.
 
 ```
-root@ubuntu-xenial:/home/vagrant/bitcoin-docker# docker-compose up -d
-Creating bitcoindocker_miner_1 ... done
-Creating bitcoindocker_node1_1 ... done
-Creating bitcoindocker_node2_1 ... done
 root@ubuntu-xenial:/home/vagrant/bitcoin-docker# curl -d '{"jsonrpc":"2.0","id":"1","method":"getblockcount"}' -u bitcoin:bitcoin localhost:18400
 {"result":0,"error":null,"id":"1"}
 ```
