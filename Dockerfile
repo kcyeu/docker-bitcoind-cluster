@@ -1,6 +1,7 @@
 FROM debian:stretch-slim
 
-ENV BITCOIN_VER 0.17.0
+ENV BITCOIN_VER 0.17.0.1
+ENV BITCOIN_DIR /bitcoin-0.17.0 
 
 RUN set -x && \
 	DEPS="curl" && \
@@ -8,7 +9,7 @@ RUN set -x && \
 	apt-get -y install ${DEPS} && \
 	curl -OL https://bitcoin.org/bin/bitcoin-core-${BITCOIN_VER}/bitcoin-${BITCOIN_VER}-x86_64-linux-gnu.tar.gz &&\
 	tar zxvf bitcoin-${BITCOIN_VER}-x86_64-linux-gnu.tar.gz && \
-	ln -sf /bitcoin-${BITCOIN_VER} /bitcoin && \
+	ln -sf ${BITCOIN_DIR} /bitcoin && \
 	ln -sf /bitcoin/bin/bitcoin-cli /bitcoin-cli && \
 	apt-get purge -y --autoremove ${DEPS} && \
 	rm -rf /var/lib/apt/lists/*
