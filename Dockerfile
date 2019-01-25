@@ -1,7 +1,7 @@
 FROM debian:stretch-slim
 
-ENV BITCOIN_VER 0.17.0.1
-ENV BITCOIN_DIR /bitcoin-0.17.0 
+ENV BITCOIN_VER 0.17.1
+ENV BITCOIN_DIR /bitcoin-0.17.1
 
 RUN set -x && \
 	DEPS="curl" && \
