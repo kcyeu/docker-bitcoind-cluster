@@ -1,27 +1,32 @@
-version: '3'
+version: '3.2'
 services:
-  node1:
+  master:
     build: .
     image: bitcoind:0.17.1
-    ports:
-      - "18400:18443"
-      - "18500:18444"
-    expose: 
-      - "18444"
-    command: [ "-regtest", "-addnode=node2:18444", "-addnode=node3:18444"]
+    volumes:
+      - type: bind
+        source: /mnt/bitcoin/cluster/1
+        target: /bitcoind-data
+    healthcheck:
+      test: ["CMD", "bitcoin-cli", "getblockchaininfo"]
+      interval: 30s
+      timeout: 20s
+      retries: 5
   node2:
     image: bitcoind:0.17.1
-    ports:
-      - "18401:18443"
-      - "18501:18444"
-    expose: 
-      - "18444"
-    command: [ "-regtest", "-addnode=node1:18444", "-addnode=node3:18444"]
+    volumes:
+      - type: bind
+        source: /mnt/bitcoin/cluster/2
+        target: /bitcoind-data
   node3:
     image: bitcoind:0.17.1
-    ports:
-      - "18402:18443"
-      - "18502:18444"
-    expose: 
-      - "18444"
-    command: [ "-regtest", "-addnode=node1:18444", "-addnode=node2:18444"]
+    volumes:
+      - type: bind
+        source: /mnt/bitcoin/cluster/3
+        target: /bitcoind-data
+  stunnel:
+    image: dweomer/stunnel
+    environment:
+      - STUNNEL_SERVICE=bitcoind-tls
+    depends_on:
+      - master

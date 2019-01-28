@@ -1,0 +1,30 @@
+version: '3.2'
+services:
+  master:
+    ports:
+      - "18400:18443"
+      - "18500:18444"
+    expose: 
+      - "18444"
+    command: [ "-addnode=node2:18444", "-addnode=node3:18444", "-regtest"]
+  node2:
+    ports:
+      - "18401:18443"
+      - "18501:18444"
+    expose: 
+      - "18444"
+    command: [ "-addnode=master:18444", "-addnode=node3:18444", "-regtest"]
+  node3:
+    ports:
+      - "18402:18443"
+      - "18502:18444"
+    expose: 
+      - "18444"
+    command: [ "-addnode=master:18444", "-addnode=node2:18444", "-regtest"]
+  stunnel:
+    environment:
+      - STUNNEL_ACCEPT=28443
+      - STUNNEL_CONNECT=master:18443
+    ports:
+      - "28443:28443"
+

@@ -1,2 +1,5 @@
 .*swp
 *.bak
+
+# Leave override file unset
+docker-compose.override.yml

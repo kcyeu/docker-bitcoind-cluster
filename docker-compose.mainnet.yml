@@ -1,0 +1,30 @@
+version: '3.2'
+services:
+  master:
+    ports:
+      - "18400:8332"
+      - "18500:8333"
+    expose: 
+      - "8333"
+    command: [ "-addnode=node2:8333", "-addnode=node3:8333"]
+  node2:
+    ports:
+      - "18401:8332"
+      - "18501:8333"
+    expose: 
+      - "8333"
+    command: [ "-addnode=master:8333", "-addnode=node3:8333"]
+  node3:
+    ports:
+      - "18402:8332"
+      - "18502:8333"
+    expose: 
+      - "8333"
+    command: [ "-addnode=master:8333", "-addnode=node2:8333"]
+  stunnel:
+    environment:
+      - STUNNEL_ACCEPT=18332
+      - STUNNEL_CONNECT=master:8332
+    ports:
+      - "18332:18332"
+
